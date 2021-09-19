@@ -2,10 +2,12 @@
 const { host, port } = require('./config')
 const server = { host, port }
 module.exports = {
-  mode: 'spa',
+  ssr: false,
+  target: 'static',
   /*
   ** Headers of the page
   */
+  telemetry:false,
   head: {
     title: process.env.npm_package_name || '',
     meta: [

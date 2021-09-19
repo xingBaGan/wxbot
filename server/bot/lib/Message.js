@@ -5,6 +5,8 @@
  * @LastEditors: lwp
  * @LastEditTime: 2021-06-25 10:24:30
  */
+const { FileBox } = require('file-box')
+//加载model 对象
 const { Message } = require('wechaty')
 const { Group } = require('../../models/group')
 const { Robot } = require('../../models/robot')
@@ -32,9 +34,9 @@ async function onMessage(msg) {
       const group = await Group.findOne({ id: room.id }, { control: 1 })
       if (!group || !group.control) return
       if (await msg.mentionSelf()) { //@自己
-        let self = await msg.talker()
-        self = '@' + self.name()
-        let sendText = msg.text().replace(self, '')
+        let robotName = 'niko'
+        let prefix = '@' + robotName
+        let sendText = msg.text().replace(prefix,'')
         sendText = sendText.trim()
         // 获取需要回复的内容
         let content = await keyWordReply(sendText, room.id)
@@ -78,7 +80,7 @@ async function onMessage(msg) {
  * @description 收到消息是否群聊名称
  * @param {Object} bot 实例对象
  * @param {Object} msg 消息对象
- * @return {Bool} 
+ * @return {Bool}
  */
 async function isRoomName(msg) {
   const group = await Group.findOne({ joinCode: msg.text() }, { id: 1 })
@@ -149,8 +151,27 @@ async function keyWordReply(keyword, roomId, person, room) {
  * @param {String} 收到消息
  * @return {String} 响应内容
  */
+let baseUrl = 'https://api.ghser.com/random/';
+async function dealRedirect(URL) {
+  if (URL.startsWith('h')) {
+    return URL
+  }
+  let { data, headers, status } = await urllib.request(baseUrl + URL, { method: 'get' })
+  if (status == '302' && headers['content-type'] == 'text/html; charset=UTF-8') {
+    return dealRedirect(headers.location)
+  }
+}
+
 async function getReply(keyword) {
   let url = TXHOST + 'robot/';
+  if (keyword == '二次元') {
+    const pkg = {
+      method: 'get'
+    }
+    let imgURL = await dealRedirect('api.php')
+    const fileBox1 = FileBox.fromUrl(imgURL)
+    return fileBox1;
+  }
   const pkg = {
     method: 'get',
     headers: {
