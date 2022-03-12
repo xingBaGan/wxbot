@@ -19,6 +19,7 @@ const uniqueId = md5.update(v1()).digest('hex')
 const TXHOST = 'http://api.tianapi.com/txapi/'
 const { tianApiKey } = require('../../../config')
 const urllib = require('urllib')
+let shouldBeRecalled = false
 
 async function onMessage(msg) {
   if (msg.self()) return
@@ -41,9 +42,15 @@ async function onMessage(msg) {
         // 获取需要回复的内容
         let content = await keyWordReply(sendText, room.id)
         if (!content) {
-          content = await getReply(sendText)
+         content = await getReply(sendText)
         }
-        room.say(content)
+        let recallMessage = await room.say(content)
+        if(recallMessage && shouldBeRecalled){
+          setTimeout(()=>{
+            recallMessage.recall()
+            shouldBeRecalled = false
+          },60000)
+        }
         return
       }
       //@成员
@@ -165,11 +172,9 @@ async function dealRedirect(URL) {
 async function getReply(keyword) {
   let url = TXHOST + 'robot/';
   if (keyword == '二次元') {
-    const pkg = {
-      method: 'get'
-    }
     let imgURL = await dealRedirect('api.php')
     const fileBox1 = FileBox.fromUrl(imgURL)
+    shouldBeRecalled  = true
     return fileBox1;
   }
   const pkg = {
