@@ -57,8 +57,8 @@ module.exports = {
 const init = async () => {
   const exists = await Auth.exists({})
   if (!exists) {
-    await Auth.create({ username: 'admin', salt: '123456', password: encryptPassword('123456', '111111') })
-    await Auth.create({ username: 'guest', salt: '123456', password: encryptPassword('123456', '111111') })
+    await Auth.create({ username: 'admin', salt: '181855mks', password: encryptPassword('20220312', '111111') })
+    // await Auth.create({ username: 'guest', salt: '123456', password: encryptPassword('123456', '111111') })
   }
 }
 init()

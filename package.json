@@ -35,11 +35,12 @@
     "qrcodejs2": "^0.0.2",
     "urllib": "^2.34.2",
     "wechaty": "^0.56.6",
-    "wechaty-puppet-padlocal": "^0.4.0"
+    "wechaty-puppet-padlocal": "^0.4.0",
+    "wechaty-puppet-wechat": "^1.12.2"
   },
   "devDependencies": {
-    "node-sass": "^4.9.4",
     "nodemon": "^1.18.9",
+    "sass": "^1.49.9",
     "sass-loader": "^7.1.0"
   }
 }

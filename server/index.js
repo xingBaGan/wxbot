@@ -53,10 +53,10 @@ async function start() {
   app.use(require('./middleware/resformat')('^/api'))
   const api = require('./routes/api')
   app.use(api.routes(), api.allowedMethods())
-  // if (config.dev) {
-  //   const builder = new Builder(nuxt)
-  //   await builder.build()
-  // }
+  if (config.dev) {
+    const builder = new Builder(nuxt)
+    await builder.build()
+  }
   app.use((ctx) => {
     ctx.status = 200
     ctx.respond = false

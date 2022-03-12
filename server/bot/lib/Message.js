@@ -37,19 +37,19 @@ async function onMessage(msg) {
       if (await msg.mentionSelf()) { //@自己
         let robotName = 'niko'
         let prefix = '@' + robotName
-        let sendText = msg.text().replace(prefix,'')
+        let sendText = msg.text().replace(prefix, '')
         sendText = sendText.trim()
         // 获取需要回复的内容
         let content = await keyWordReply(sendText, room.id)
         if (!content) {
-         content = await getReply(sendText)
+          content = await getReply(sendText)
         }
         let recallMessage = await room.say(content)
-        if(recallMessage && shouldBeRecalled){
-          setTimeout(()=>{
+        if (recallMessage && shouldBeRecalled) {
+          setTimeout(() => {
             recallMessage.recall()
             shouldBeRecalled = false
-          },60000)
+          }, 60000)
         }
         return
       }
@@ -174,7 +174,7 @@ async function getReply(keyword) {
   if (keyword == '二次元') {
     let imgURL = await dealRedirect('api.php')
     const fileBox1 = FileBox.fromUrl(imgURL)
-    shouldBeRecalled  = true
+    shouldBeRecalled = true
     return fileBox1;
   }
   const pkg = {
@@ -193,10 +193,10 @@ async function getReply(keyword) {
     encoding: null,
     timeout: 5000,
   }
-  let { status, data } = await urllib.request(url, pkg)
-  if (status !== 200) return '不好意思，我断网了'
-  data = JSON.parse(data.toString())
-  if (data.code != 200) return '我累啦，等我休息好再来哈'
+    let { status, data } = await urllib.request(url, pkg)
+    if (status !== 200) return '不好意思，我断网了'
+    data = JSON.parse(data.toString())
+    if (data.code != 200) return '我累啦，等我休息好再来哈'
   return data.newslist[0].reply
 }
 module.exports = onMessage
